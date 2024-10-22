@@ -1,46 +1,39 @@
 @extends('layouts.main')
 
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Tout Là-Haut</title>
-    @vite(['resources/css/app.css','resources/js/app.js'])
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-</head>
-<body>
-
-    @section('navbar')
-        <div class="fixed z-10 w-full"> 
-            <a href="{{ route('menu') }}" class="absolute top-8 left-8 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 border-none rounded-md w-12 text-base inline-block text-center"><i class="fa-solid fa-bars"></i></a>    
-            {{-- <a class="absolute top-8 right-24 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base"> <i class="fa-solid fa-user"></i> </a>  --}}
-            @if(Auth::check())
+@section('navbar')
+    <div class="fixed z-10 w-full">
+        <a href="{{ route('menu') }}"
+            class="absolute top-8 left-8 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 border-none rounded-md w-12 text-base inline-block text-center"><i
+                class="fa-solid fa-bars"></i></a>
+        {{-- <a class="absolute top-8 right-24 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base"> <i class="fa-solid fa-user"></i> </a>  --}}
+        @if (Auth::check())
             <div class="hidden sm:flex sm:items-center sm:ms-6 absolute top-9 right-24">
                 <x-dropdown align="right" width="48">
                     <x-slot name="trigger">
-                        <button class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-bold rounded-md bg-white bg-opacity-90 text-custom-vert focus:outline-none transition ease-in-out duration-150">
+                        <button
+                            class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-bold rounded-md bg-white bg-opacity-90 text-custom-vert focus:outline-none transition ease-in-out duration-150">
                             <div> {{ Auth::user()->prenom }} {{ Auth::user()->nom }} </div>
-        
+
                             <div class="ms-1">
                                 <svg class="fill-current h-4 w-4" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20">
-                                    <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+                                    <path fill-rule="evenodd"
+                                        d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                                        clip-rule="evenodd" />
                                 </svg>
                             </div>
                         </button>
                     </x-slot>
-        
+
                     <x-slot name="content">
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Mon profil') }}
                         </x-dropdown-link>
-        
+
                         <!-- Déconnexion -->
                         <form method="POST" action="{{ route('logout') }}">
                             @csrf
                             <x-dropdown-link :href="route('logout')"
-                                    onclick="event.preventDefault();
+                                onclick="event.preventDefault();
                                                 this.closest('form').submit();">
                                 {{ __('Se déconnecter') }}
                             </x-dropdown-link>
@@ -49,116 +42,209 @@
                 </x-dropdown>
             </div>
         @else
-            <a href="{{ route('login') }}" class="absolute top-8 right-24 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base">
+            <a href="{{ route('login') }}"
+                class="absolute top-8 right-24 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base">
                 <i class="fa-solid fa-user"></i>
             </a>
         @endif
-           
-           
-            <a class="absolute top-8 right-8 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base"> EN </a> 
+
+
+        <a
+            class="absolute top-8 right-8 bg-gray-400 bg-opacity-65 text-white py-2.5 px-3 font-bold border-none inline-block text-center rounded w-12 tracking-wide text-base">
+            EN </a>
+    </div>
+@endsection
+
+@section('main')
+    <div class="bg-custom-vert h-screen w-full">
+        <div class="flex flex-row">
+            <img class="w-[550px] h-screen object-cover" src="{{ Storage::url('images/cgv.jpg') }}" alt="Cabane intérieur">
+            <div class="relative top-60 left-32">
+                <h1 class="text-6xl text-white font-bold"> Réserver <br /> votre séjour </h1>
+                <hr class="border-t-4 border-custom-beige w-24 mt-4">
+            </div>
         </div>
-    @endsection
+    </div>
 
+    <div class="relative w-full h-screen bg-black">
+        <img class="w-full h-screen object-cover opacity-50" src="{{ Storage::url('images/reservation.jpg') }}"
+            alt="Cabane au bord de l'eau">
 
-    @section('main')
-
-
-    <div class="bg-custom-vert h-screen w-full" >
-        <div class="flex flex-row"> 
+        {{-- @section('main')
+    <div class="bg-custom-vert h-screen w-full">
+        <div class="flex flex-row">
             <img class="w-[550px] h-screen" src="{{ Storage::url('images/cgv.jpg') }}" alt="Cabane intérieur">
-            <h1 class=" relative top-60 left-32 text-6xl text-white font-bold "> Réserver <br/> votre séjour </h1>
+            <h1 class=" relative top-60 left-32 text-6xl text-white font-bold "> Réserver <br /> votre séjour </h1>
             <hr class="border-t-4 border-custom-beige w-24 relative top-96 right-52">
         </div>
-    </div> 
-
-    <div class="w-full h-screen bg-black"> 
-
-    <img class="w-full h-screen object-cover opacity-50" src="{{ Storage::url('images/reservation.jpg') }}" alt="Cabane au bord de l'eau">
-    
-   <div class="flex justify-center relative bottom-96">
-    <div class="bg-custom-vert w-[800px] h-[200px] rounded"> 
-
-        <form action="{{ route('disponibilite') }}" method="POST">
-            @csrf
-
-<div class="flex justify-end mr-12 relative top-6">
- <div class="text-custom-beige font-bold text-sm relative top-6 "> Adultes </div>
- <div class="text-custom-beige font-bold ml-8 text-sm"> Enfants <br/> (de 2 à 10 ans)</div>
-</div>
-
-    <div class="flex flex-row justify-center p-8">   
-<div id="date-range-picker"  class="flex items-center">
-    <div class="relative">
-      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-           <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-          </svg>
-      </div>
-      <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-start" name="dateArrivee" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required placeholder="Date d'arrivée">
-    </div>
-    <span class="mx-4 text-white">au</span>
-    <div class="relative">
-      <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-           <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z"/>
-          </svg>
-      </div>
-      <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-end" name="dateDepart" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" required placeholder="Date de départ">
-  </div>
-  </div>
-  
-  <select name="nombreAdultes" class="text-sm rounded mx-4 focus:border-custom-marron focus:ring-custom-marron" required>
-    <option value="" disabled selected>0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-  </select>
-
-  <select name="nombreEnfants" class="text-sm rounded focus:border-custom-marron focus:ring-custom-marron" >
-    <option value="" disabled selected>0</option>
-    <option value="1">1</option>
-    <option value="2">2</option>
-    <option value="3">3</option>
-    <option value="4">4</option>
-    <option value="5">5</option>
-    <option value="6">6</option>
-  </select>
-
-  </div>
-
-  <div class="flex flex-row-reverse">
-    <button type="submit" style="background-color: #C4AA84" class="text-white font-bold text-sm px-4 py-2 rounded-md relative bottom-2 right-8">Vérifier les disponibilités</button>
-</div>
-        </form>
     </div>
 
+    <div class="w-full h-screen bg-black">
+
+        <img class="w-full h-screen object-cover opacity-50" src="{{ Storage::url('images/reservation.jpg') }}"
+            alt="Cabane au bord de l'eau"> --}}
+
+        {{-- <div class="flex justify-center relative bottom-96">
+            <div class="bg-custom-vert w-[800px] h-[200px] rounded">
+
+                <form action="{{ route('disponibilite') }}" method="POST">
+                    @csrf
+
+                    <div class="flex justify-end mr-12 relative top-6">
+                        <div class="text-custom-beige font-bold text-sm relative top-6 "> Adultes </div>
+                        <div class="text-custom-beige font-bold ml-8 text-sm"> Enfants <br /> (de 2 à 10 ans)</div>
+                    </div>
+
+                    <div class="flex flex-row justify-center p-8">
+                        <div id="date-range-picker" class="flex items-center">
+                            <div class="relative">
+                                <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-start"
+                                    name="dateArrivee" type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5"
+                                    required placeholder="Date d'arrivée">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <span class="mx-4 text-white">au</span>
+                            <div class="relative">
+                                <div class="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500 dark:text-gray-400" aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                                <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-end" name="dateDepart"
+                                    type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                    required placeholder="Date de départ">
+                            </div>
+                        </div>
+
+                        <select name="nombreAdultes"
+                            class="text-sm rounded border-gray-300 mx-2  focus:border-custom-marron focus:ring-custom-marron">
+                            <option value="" disabled selected>0</option>
+                            @for ($i = 1; $i <= 6; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+
+                        <select name="nombreEnfants"
+                            class="text-sm rounded border-gray-300 mx-2  focus:border-custom-marron focus:ring-custom-marron">
+                            <option value="" disabled selected>0</option>
+                            @for ($i = 1; $i <= 6; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+
+                    </div>
+
+                    <div class="flex flex-row-reverse">
+                        <button type="submit" style="background-color: #C4AA84"
+                            class="text-white font-bold text-sm px-4 py-2 rounded-md relative bottom-2 right-8">Vérifier les
+                            disponibilités</button>
+                    </div>
+                </form>
+            </div>
+
+        </div> --}}
+
+        <div class="flex justify-center absolute inset-0 items-center">
+            <div class="bg-custom-vert w-[800px] h-[200px] rounded-lg p-4">
+                <form action="{{ route('disponibilite') }}" method="POST" class="space-y-4">
+                    @csrf
+
+                    <div class="flex justify-end space-x-8">
+                        <div class="text-custom-beige font-bold text-sm">Adultes</div>
+                        <div class="text-custom-beige font-bold text-sm">Enfants <br />(de 2 à 10 ans)</div>
+                    </div>
+
+                    <div class="flex items-center justify-center space-x-4">
+                        <div id="date-range-picker" class="flex items-center space-x-2">
+                            <div class="relative">
+                                <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-start"
+                                    name="dateArrivee" type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5"
+                                    required placeholder="Date d'arrivée">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                            </div>
+
+                            <span class="mx-2 text-white">au</span>
+
+                            <div class="relative">
+                                <input datepicker datepicker-format="dd-mm-yyyy" id="datepicker-range-end" name="dateDepart"
+                                    type="text"
+                                    class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded focus:border-custom-marron focus:ring-custom-marron block w-full ps-10 p-2.5"
+                                    required placeholder="Date de départ">
+                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                                    <svg class="w-4 h-4 text-gray-500" xmlns="http://www.w3.org/2000/svg"
+                                        fill="currentColor" viewBox="0 0 20 20">
+                                        <path
+                                            d="M20 4a2 2 0 0 0-2-2h-2V1a1 1 0 0 0-2 0v1h-3V1a1 1 0 0 0-2 0v1H6V1a1 1 0 0 0-2 0v1H2a2 2 0 0 0-2 2v2h20V4ZM0 18a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8H0v10Zm5-8h10a1 1 0 0 1 0 2H5a1 1 0 0 1 0-2Z" />
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+
+                        <select name="nombreAdultes"
+                            class="text-sm rounded border-gray-300 mx-2 focus:border-custom-marron focus:ring-custom-marron"
+                            required>
+                            <option value="" disabled selected>0</option>
+                            @for ($i = 1; $i <= 6; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+
+                        <select name="nombreEnfants"
+                            class="text-sm rounded border-gray-300 mx-2 focus:border-custom-marron focus:ring-custom-marron">
+                            <option value="" disabled selected>0</option>
+                            @for ($i = 1; $i <= 6; $i++)
+                                <option value="{{ $i }}">{{ $i }}</option>
+                            @endfor
+                        </select>
+                    </div>
+
+                    <div class="flex justify-end pr-8">
+                        <button type="submit" class="text-white font-bold text-sm px-4 py-2 rounded-md"
+                            style="background-color: #C4AA84">Vérifier les disponibilités</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
+    <script>
+        function validateForm() {
+            const dateArrivee = new Date(document.getElementById('datepicker-range-start').value);
+            const dateDepart = new Date(document.getElementById('datepicker-range-end').value);
+            const nombreAdultes = parseInt(document.getElementById('nombreAdultes').value || 0);
+            const nombreEnfants = parseInt(document.getElementById('nombreEnfants').value || 0);
+            const submitButton = document.getElementById('submit-button');
 
-       
-    </div>
+            // Vérifier si la date de départ est supérieure ou égale à la date d'arrivée
+            const datesValid = !isNaN(dateArrivee) && !isNaN(dateDepart) && dateDepart >= dateArrivee;
 
+            // Vérifier si le nombre d'enfants > 0 nécessite au moins un adulte
+            const adultsValid = (nombreEnfants === 0 || nombreAdultes > 0);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    @endsection
-
-
-</body>
-</html>
+            // Activer le bouton de soumission si toutes les conditions sont remplies
+            if (datesValid && adultsValid) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+    </script>
+@endsection

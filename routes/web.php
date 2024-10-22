@@ -1,5 +1,5 @@
 <?php
-
+/*
 use App\Http\Controllers\AvailableRoomController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\EquipementController;
@@ -51,7 +51,7 @@ Route::get('/faq', function () {
 //     return view('pages.contact');
 // })->name('contact')->middleware(\App\Http\Middleware\Localisation::class);
 
-Route::get('/réserver', function () {
+Route::get('/reserver', function () {
     return view('pages.reserver');
 })->name('reserver');
 
@@ -134,3 +134,80 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+*/
+
+
+use App\Http\Controllers\{
+    AvailableRoomController,
+    ProfileController,
+    EquipementController,
+    LanguageController,
+    CabaneController,
+    PrestationController,
+    NewsletterController,
+    FormulaireController,
+    CabaneViewController,
+    ClientInfoController,
+    PrestationViewController,
+    ContactRequestController,
+    ExtrasController,
+    MapController,
+    ReservationController,
+    ValidateClientController
+};
+use Illuminate\Support\Facades\Route;
+
+// Routes avec middleware "web"
+Route::middleware('web')->group(function () {
+    Route::view('/', 'pages.home')->name('accueil');
+    Route::view('/menu', 'pages.menu')->name('menu');
+    Route::view('/noscabanes', 'pages.cabanes.noscabanes')->name('noscabanes');
+    Route::get('/cabaneniddouillet', [CabaneViewController::class, 'showCabaneNidDouillet'])->name('cabane1');
+    Route::get('/cabaneosmose', [CabaneViewController::class, 'showCabaneOsmose'])->name('cabane2');
+    Route::get('/cabaneescapade', [CabaneViewController::class, 'showCabaneEscapade'])->name('cabane3');
+    Route::get('/cabaneeden', [CabaneViewController::class, 'showCabaneEden'])->name('cabane4');
+    Route::get('/prestations', [PrestationViewController::class, 'showPrestations'])->name('prestations');
+    Route::get('/contact&acces', [ContactRequestController::class, 'index'])->name('contact');
+    Route::match(['get', 'post'], '/reservation/cabanes/disponibilite', [AvailableRoomController::class, 'store'])->name('disponibilite');
+    Route::match(['get', 'post'], '/reservation/extras', [ExtrasController::class, 'index'])->name('extras');
+    Route::match(['get', 'post'], '/reservation/informations/client', [ClientInfoController::class, 'store'])->name('info-client');
+    Route::post('/reservation/validate/client', [ValidateClientController::class, 'create'])->name('validate-client');
+    Route::view('/reservation/paiement', 'pages.paiement')->name('resa-payment');
+    Route::view('/reservation/confirmation', 'pages.resa-confirmed')->name('confirmed');
+    Route::get('/lang/{lang}', [LanguageController::class, 'switchLang'])->name('lang.switch');
+});
+
+// Pages légales (pas besoin du middleware "web")
+Route::view('/mentionslegales', 'pages.footer.mentionslegales')->name('mentionslegales');
+Route::view('/conditionsgeneralesdevente', 'pages.footer.conditionsvente')->name('cgv');
+Route::view('/confidentialite', 'pages.footer.confidentialite')->name('confidentialite');
+Route::view('/plandusite', 'pages.footer.plandusite')->name('plandusite');
+Route::view('/faq', 'pages.footer.faq')->name('faq');
+Route::view('/reserver', 'pages.reserver')->name('reserver');
+
+// Routes d'administration (CRUD) avec middleware "auth"
+Route::middleware(['auth'])->prefix('admin')->group(function () {
+    Route::resource('cabanes', CabaneController::class)->except(['show', 'create']);
+    Route::resource('equipements', EquipementController::class)->except(['show', 'create']);
+    Route::resource('prestations', PrestationController::class)->except(['show', 'create']);
+    Route::post('/prestations/category/create', [PrestationController::class, 'createCategory'])->name('ajouterCategorie');
+});
+
+// Routes newsletter
+Route::prefix('newsletter')->group(function () {
+    Route::get('/', [NewsletterController::class, 'index'])->name('afficherEmails');
+    Route::get('/delete/{id}', [NewsletterController::class, 'destroy'])->name('supprimerEmail');
+    Route::post('/inscription', [NewsletterController::class, 'create'])->name('ajouterNewsletter');
+});
+
+// Routes de profil et d'authentification
+Route::middleware('auth')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::view('/dashboard', 'dashboard')->name('dashboard')->middleware('verified');
+});
+
+Route::post('/demandecontact', [ContactRequestController::class, 'store'])->name('contact-request');
+
+require __DIR__ . '/auth.php';
