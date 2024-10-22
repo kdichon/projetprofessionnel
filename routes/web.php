@@ -187,7 +187,7 @@ Route::view('/reserver', 'pages.reserver')->name('reserver');
 
 // Routes d'administration (CRUD) avec middleware "auth"
 Route::middleware(['auth'])->prefix('admin')->group(function () {
-    Route::resource('cabanes', CabaneController::class)->except(['show', 'create']);
+    Route::resource('cabanes', CabaneController::class)->except(['show', 'store']);
     Route::resource('equipements', EquipementController::class)->except(['show', 'create']);
     Route::resource('prestations', PrestationController::class)->except(['show', 'create']);
     Route::post('/prestations/category/create', [PrestationController::class, 'createCategory'])->name('ajouterCategorie');
